@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Compass, Sparkles, Heart } from 'lucide-react';
+import { Compass, Sparkles, Heart, Layers } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (view: string) => void;
@@ -15,12 +15,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onReplayIntro }) => 
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-8 border-b border-warm-200">
           {/* Logo & Tagline */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-sky text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky to-accent text-white font-extrabold flex items-center justify-center text-sm shadow-sm">
               Q
             </div>
             <div>
-              <span className="font-bold text-warm-900 text-base">Quest Platform</span>
-              <p className="text-xs text-warm-500">Learn by Playing. Grow by Completing Quests.</p>
+              <span className="font-extrabold text-warm-900 text-base">QuestDeck Platform</span>
+              <p className="text-xs text-warm-500">Master Computer Science through Interactive Decks & AI Roadmaps.</p>
             </div>
           </div>
 
@@ -35,9 +35,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onReplayIntro }) => 
             <button onClick={() => onNavigate('dashboard')} className="hover:text-sky transition-colors cursor-pointer">
               Dashboard
             </button>
-            <button onClick={() => onNavigate('ai-mentor')} className="hover:text-sky transition-colors cursor-pointer">
-              AI Mentor
-            </button>
             <button onClick={onReplayIntro} className="hover:text-sky transition-colors cursor-pointer">
               Replay Q Intro
             </button>
@@ -45,9 +42,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onReplayIntro }) => 
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-warm-500 gap-4">
-          <p>© {new Date().getFullYear()} Quest Inc. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} QuestDeck. All rights reserved.</p>
           <div className="flex items-center gap-1">
-            <span>Crafted with Notion & Linear aesthetics for forward-thinking students</span>
+            <span>Gamified AI Learning Platform built with Notion & Linear aesthetics</span>
           </div>
         </div>
       </div>

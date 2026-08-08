@@ -1,20 +1,21 @@
 import { UserProfile, RoadmapNode, Achievement } from './types';
-import { INITIAL_USER, INITIAL_ROADMAP, INITIAL_ACHIEVEMENTS } from './data';
+import { ALEX_USER, MULTI_SUBJECT_ROADMAPS, INITIAL_ACHIEVEMENTS } from './data';
 
 const STORAGE_KEYS = {
-  USER: 'quest_user_profile',
-  ROADMAP: 'quest_roadmap_nodes',
-  ACHIEVEMENTS: 'quest_achievements',
-  AUTH_TOKEN: 'quest_jwt_token',
+  USER: 'questdeck_user_profile',
+  ROADMAP: 'questdeck_roadmap_nodes',
+  ROADMAP_MODE: 'questdeck_roadmap_mode', // 'common' | 'personalized'
+  ACHIEVEMENTS: 'questdeck_achievements',
+  AUTH_TOKEN: 'questdeck_jwt_token',
 };
 
 export const getStoredUser = (): UserProfile => {
-  if (typeof window === 'undefined') return INITIAL_USER;
+  if (typeof window === 'undefined') return ALEX_USER;
   try {
     const item = localStorage.getItem(STORAGE_KEYS.USER);
-    return item ? JSON.parse(item) : INITIAL_USER;
+    return item ? JSON.parse(item) : ALEX_USER;
   } catch {
-    return INITIAL_USER;
+    return ALEX_USER;
   }
 };
 
@@ -27,13 +28,33 @@ export const setStoredUser = (user: UserProfile): void => {
   }
 };
 
+export const getStoredRoadmapMode = (): 'common' | 'personalized' => {
+  if (typeof window === 'undefined') return 'personalized';
+  try {
+    const mode = localStorage.getItem(STORAGE_KEYS.ROADMAP_MODE);
+    return (mode === 'common' || mode === 'personalized') ? mode : 'personalized';
+  } catch {
+    return 'personalized';
+  }
+};
+
+export const setStoredRoadmapMode = (mode: 'common' | 'personalized'): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(STORAGE_KEYS.ROADMAP_MODE, mode);
+  } catch (e) {
+    console.error('Failed to save roadmap mode:', e);
+  }
+};
+
 export const getStoredRoadmap = (): RoadmapNode[] => {
-  if (typeof window === 'undefined') return INITIAL_ROADMAP;
+  const defaultRoadmap = MULTI_SUBJECT_ROADMAPS['Web Dev'];
+  if (typeof window === 'undefined') return defaultRoadmap;
   try {
     const item = localStorage.getItem(STORAGE_KEYS.ROADMAP);
-    return item ? JSON.parse(item) : INITIAL_ROADMAP;
+    return item ? JSON.parse(item) : defaultRoadmap;
   } catch {
-    return INITIAL_ROADMAP;
+    return defaultRoadmap;
   }
 };
 
@@ -76,7 +97,6 @@ export const addXpAndCoins = (xpGain: number, coinGain: number): { user: UserPro
   const currentXp = user.xp + xpGain;
   const currentCoins = user.coins + coinGain;
   
-  // Calculate level: level 1 is 0-500, level 2 is 501-1200, level 3 is 1201-2200, level 4 is 2201-3500, etc.
   const newLevel = Math.floor(currentXp / 600) + 1;
   const leveledUp = newLevel > user.level;
 
@@ -103,7 +123,6 @@ export const completeRoadmapNode = (nodeId: string): RoadmapNode[] => {
     return node;
   });
 
-  // Unlock next node if present
   if (foundIndex !== -1 && foundIndex + 1 < updated.length) {
     if (updated[foundIndex + 1].status === 'locked') {
       updated[foundIndex + 1].status = 'unlocked';

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Play, Shield, Network, Cpu, Code2, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Play, Shield, Network, Cpu, Code2, CheckCircle2, Layers } from 'lucide-react';
 
 interface HeroSectionProps {
   onStartQuest: () => void;
@@ -23,9 +23,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-warm-200 shadow-card mb-6"
         >
-          <span className="w-2 h-2 rounded-full bg-sage animate-pulse" />
-          <span className="text-xs font-bold text-warm-800 tracking-tight">
-            Learn by Playing. Grow by Completing Quests.
+          <span className="w-2 h-2 rounded-full bg-sky animate-pulse" />
+          <span className="text-xs font-extrabold text-warm-900 tracking-tight flex items-center gap-1.5">
+            Welcome to <span className="text-sky font-black">QuestDeck</span> — Gamified AI Learning Deck
           </span>
           <Sparkles className="w-3.5 h-3.5 text-accent-dark ml-1" />
         </motion.div>
@@ -37,7 +37,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-warm-900 tracking-tight leading-[1.15] max-w-4xl mx-auto"
         >
-          Learning should feel like an <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky via-sky-dark to-sage-deep">adventure</span>.
+          Master Computer Science through <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky via-sky-dark to-accent-dark">QuestDeck</span> Interactive Decks
         </motion.h1>
 
         {/* Subtitle */}
@@ -47,7 +47,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mt-6 text-lg sm:text-xl text-warm-700 max-w-2xl mx-auto font-normal leading-relaxed"
         >
-          No more passive 3-hour video lectures or dry textbooks. Master computer science, networking, and security through interactive hands-on missions where every decision matters.
+          No passive video lectures. QuestDeck turns complex software engineering, networking, and security into interactive simulator missions and dual-mode AI roadmaps tailored specifically to your study schedule.
         </motion.p>
 
         {/* CTAs */}
@@ -61,7 +61,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
             onClick={onStartQuest}
             className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-sky hover:bg-sky-dark text-white text-base font-bold shadow-float transition-all hover:scale-105 flex items-center justify-center gap-2 group cursor-pointer"
           >
-            <span>Start Your Quest</span>
+            <Layers className="w-5 h-5 text-white" />
+            <span>Launch QuestDeck Platform</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
           <button
@@ -69,7 +70,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
             className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-white hover:bg-warm-50 text-warm-800 border border-warm-200 hover:border-sky text-base font-semibold shadow-card transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Play className="w-4 h-4 text-sky fill-sky" />
-            <span>Launch Live Mission Sim</span>
+            <span>Try Interactive Simulator</span>
           </button>
         </motion.div>
 
@@ -82,19 +83,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
         >
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-mint" />
-            <span>Zero Video Lectures</span>
+            <span>Dual-Mode AI Roadmaps</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-sky" />
-            <span>Duolingo XP & Streaks</span>
+            <span>Gamified XP & Questboards</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-accent-dark" />
-            <span>AI Learning Planner</span>
+            <span>Floating AI Mentor</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-4 h-4 text-sage-deep" />
-            <span>University Ready</span>
+            <span>LeetCode Style Rewards</span>
           </div>
         </motion.div>
 
@@ -110,7 +111,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
               <Network className="w-5 h-5" />
             </div>
             <h4 className="text-sm font-bold text-warm-900">Networking</h4>
-            <p className="text-xs text-warm-500 mt-1">Become a Data Packet</p>
+            <p className="text-xs text-warm-500 mt-1">Packet Routing Deck</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-white border border-warm-200 shadow-card flex flex-col items-center text-center hover:border-sage transition-all">
@@ -118,7 +119,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
               <Shield className="w-5 h-5" />
             </div>
             <h4 className="text-sm font-bold text-warm-900">Cybersecurity</h4>
-            <p className="text-xs text-warm-500 mt-1">Defend SOC Operations</p>
+            <p className="text-xs text-warm-500 mt-1">SOC Defender Deck</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-white border border-warm-200 shadow-card flex flex-col items-center text-center hover:border-accent transition-all">
@@ -126,7 +127,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
               <Code2 className="w-5 h-5" />
             </div>
             <h4 className="text-sm font-bold text-warm-900">Web Dev</h4>
-            <p className="text-xs text-warm-500 mt-1">Fix Live Code Bugs</p>
+            <p className="text-xs text-warm-500 mt-1">Full-Stack RSC Deck</p>
           </div>
 
           <div className="p-4 rounded-2xl bg-white border border-warm-200 shadow-card flex flex-col items-center text-center hover:border-coral transition-all">
@@ -134,7 +135,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStartQuest, onTryMis
               <Cpu className="w-5 h-5" />
             </div>
             <h4 className="text-sm font-bold text-warm-900">Operating Systems</h4>
-            <p className="text-xs text-warm-500 mt-1">Act as the CPU Kernel</p>
+            <p className="text-xs text-warm-500 mt-1">Kernel Process Deck</p>
           </div>
         </motion.div>
       </div>

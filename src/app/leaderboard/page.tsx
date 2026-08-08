@@ -1,51 +1,73 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Flame, Zap, ArrowLeft, Crown } from 'lucide-react';
+import { Flame, Zap, ArrowLeft, Crown, EyeOff } from 'lucide-react';
 import { INITIAL_LEADERBOARD } from '@/lib/data';
 import { getStoredUser } from '@/lib/storage';
 import { sounds } from '@/lib/soundEngine';
 import { Navbar } from '@/components/landing/Navbar';
 
 export default function LeaderboardPage() {
-  const user = getStoredUser();
-  const top3 = INITIAL_LEADERBOARD.slice(0, 3);
-  const remainingTableRanks = INITIAL_LEADERBOARD.slice(3);
+  const router = useRouter();
+  const [user, setUser] = useState(() => getStoredUser());
 
-  // Play ambient page entry SFX sound when Leaderboard opens
   useEffect(() => {
     sounds.playLevelUp();
+    setUser(getStoredUser());
   }, []);
+
+  const leaderboardUsers = INITIAL_LEADERBOARD.map(u => {
+    if (u.isCurrentUser && user.isPrivateOnLeaderboard) {
+      return {
+        ...u,
+        name: 'Anonymous Questor 🥷',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=250&q=80',
+        badge: '🔒 Private Profile'
+      };
+    }
+    return u;
+  });
+
+  const top3 = leaderboardUsers.slice(0, 3);
+  const remainingTableRanks = leaderboardUsers.slice(3);
+
+  const handleBack = () => {
+    sounds.playClick();
+    router.back();
+  };
 
   return (
     <div className="min-h-screen bg-[#FAFAF7] flex flex-col">
       <Navbar
         user={user}
         onOpenAuth={() => {}}
-        onNavigate={() => {}}
-        onReplayIntro={() => {}}
+        onNavigate={(view) => {
+          if (view === 'landing') router.push('/');
+          if (view === 'roadmap') router.push('/roadmap');
+          if (view === 'dashboard') router.push('/dashboard');
+        }}
+        onReplayIntro={() => router.push('/')}
         onOpenSearch={() => {}}
-        onOpenFlashcards={() => {}}
+        onOpenFlashcards={() => router.push('/flashcards')}
       />
 
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-warm-200">
-          <Link 
-            href="/" 
-            onClick={() => sounds.playClick()}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-warm-100 border border-warm-200 text-warm-800 text-xs font-bold transition-all shadow-card"
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-warm-100 border border-warm-200 text-warm-800 text-xs font-extrabold transition-all shadow-card cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-sky" />
-            <span>Back to Dashboard</span>
-          </Link>
+            <span>Back</span>
+          </button>
 
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-sky text-white font-extrabold flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky to-accent text-white font-extrabold flex items-center justify-center shadow-sm">
               Q
             </div>
-            <span className="font-extrabold text-warm-900 text-lg">Grand Master League</span>
+            <span className="font-extrabold text-warm-900 text-lg">Questboard League</span>
           </div>
         </div>
 
@@ -53,8 +75,15 @@ export default function LeaderboardPage() {
           <span className="pill-badge pill-yellow text-xs uppercase font-bold tracking-wider mb-2">
             Weekly Global Competition
           </span>
-          <h1 className="text-3xl font-extrabold text-warm-900">Student Leaderboard</h1>
-          <p className="text-xs text-warm-500 mt-1">Top 3 Champions on Podium • All Ranks (4-8) below</p>
+          <h1 className="text-3xl font-extrabold text-warm-900">Questboard Hall of Fame</h1>
+          <p className="text-xs text-warm-500 mt-1">Top 3 Champions on Podium • Live Weekly XP Standings</p>
+
+          {user.isPrivateOnLeaderboard && (
+            <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-warm-200/60 border border-warm-300 text-xs font-bold text-warm-700">
+              <EyeOff className="w-3.5 h-3.5 text-warm-500" />
+              <span>Your profile is currently displayed as Anonymous Questor</span>
+            </div>
+          )}
         </div>
 
         {/* Top 3 Podium Cards (Ranks 1, 2, 3) */}

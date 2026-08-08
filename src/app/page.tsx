@@ -38,18 +38,19 @@ import { sounds } from '@/lib/soundEngine';
 export default function Home() {
   const [showIntro, setShowIntro] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
-      return !sessionStorage.getItem('quest_intro_seen');
+      return !sessionStorage.getItem('questdeck_intro_seen');
     }
     return true;
   });
 
   const handleFinishIntro = () => {
     if (typeof window !== 'undefined') {
-      sessionStorage.setItem('quest_intro_seen', 'true');
+      sessionStorage.setItem('questdeck_intro_seen', 'true');
     }
     setShowIntro(false);
   };
-  const [currentView, setCurrentView] = useState<'landing' | 'roadmap' | 'dashboard' | 'mission' | 'onboarding' | 'ai-mentor'>('landing');
+
+  const [currentView, setCurrentView] = useState<'landing' | 'roadmap' | 'dashboard' | 'mission' | 'onboarding'>('landing');
   
   const [user, setUser] = useState<UserProfile | null>(null);
   const [roadmapNodes, setRoadmapNodes] = useState<RoadmapNode[]>([]);
@@ -57,7 +58,7 @@ export default function Home() {
 
   const [activeMissionNode, setActiveMissionNode] = useState<RoadmapNode | null>(null);
 
-  // Modals & Drawers state
+  // Modals state
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
@@ -66,7 +67,6 @@ export default function Home() {
   const [isFlashcardsOpen, setIsFlashcardsOpen] = useState(false);
   const [isCertificateOpen, setIsCertificateOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isAIMentorOpen, setIsAIMentorOpen] = useState(false);
 
   useEffect(() => {
     setUser(getStoredUser());
@@ -204,6 +204,10 @@ export default function Home() {
             user={user || getStoredUser()}
             roadmapNodes={roadmapNodes}
             onSelectNode={handleSelectMissionNode}
+            onUserUpdated={(updatedUser) => {
+              setUser(updatedUser);
+              setStoredUser(updatedUser);
+            }}
           />
         )}
 
@@ -214,28 +218,17 @@ export default function Home() {
             achievements={achievements}
             onNavigateToRoadmap={() => setCurrentView('roadmap')}
             onLaunchMission={handleSelectMissionNode}
-            onOpenAIMentor={() => setIsAIMentorOpen(true)}
+            onOpenAIMentor={() => {}}
             onOpenDailyQuests={() => setIsDailyQuestsOpen(true)}
             onOpenQuestShop={() => setIsQuestShopOpen(true)}
             onOpenCertificate={() => setIsCertificateOpen(true)}
             onOpenFlashcards={() => setIsFlashcardsOpen(true)}
             onBackToLanding={() => setCurrentView('landing')}
+            onUserSwitch={(newUser) => {
+              setUser(newUser);
+              setStoredUser(newUser);
+            }}
           />
-        )}
-
-        {currentView === 'ai-mentor' && (
-          <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-            <h2 className="text-2xl font-extrabold text-warm-900 mb-4">Quest AI Mentor Station</h2>
-            <p className="text-sm text-warm-600 mb-6">
-              Ask your AI Mentor any doubts across Computer Networks, Cybersecurity, Web Dev, Operating Systems, AI, Databases, Cloud & Mobile.
-            </p>
-            <button
-              onClick={() => setIsAIMentorOpen(true)}
-              className="px-6 py-3 rounded-full bg-sky text-white font-bold text-sm shadow-float"
-            >
-              Open AI Mentor Window
-            </button>
-          </div>
         )}
       </main>
 
@@ -290,12 +283,9 @@ export default function Home() {
         />
       )}
 
+      {/* Floating Global AI Mentor Chatbot */}
       {user && (
-        <AIMentorWidget
-          user={user}
-          isOpen={isAIMentorOpen}
-          onClose={() => setIsAIMentorOpen(false)}
-        />
+        <AIMentorWidget user={user} />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, Coins, Shield, Zap, Crown, ArrowLeft, Shirt, CheckCircle2, AlertCircle } from 'lucide-react';
 import { INITIAL_SHOP_ITEMS } from '@/lib/data';
@@ -11,11 +11,11 @@ import { sounds } from '@/lib/soundEngine';
 import { Navbar } from '@/components/landing/Navbar';
 
 export default function ShopPage() {
+  const router = useRouter();
   const [user, setUser] = useState<UserProfile>(() => getStoredUser());
   const [redeemedMsg, setRedeemedMsg] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Play ambient page entry SFX sound when Shop opens
   useEffect(() => {
     sounds.playXpGain();
   }, []);
@@ -38,7 +38,12 @@ export default function ShopPage() {
 
     setStoredUser(updatedUser);
     setUser(updatedUser);
-    setRedeemedMsg(`Successfully redeemed "${item.title}"! ${item.category === 'Booster' ? 'Physical swag shipping confirmation sent to your email.' : 'Power-up item active.'}`);
+    setRedeemedMsg(`Successfully redeemed "${item.title}"! Physical merch shipping confirmation sent.`);
+  };
+
+  const handleBack = () => {
+    sounds.playClick();
+    router.back();
   };
 
   return (
@@ -46,22 +51,25 @@ export default function ShopPage() {
       <Navbar
         user={user}
         onOpenAuth={() => {}}
-        onNavigate={() => {}}
-        onReplayIntro={() => {}}
+        onNavigate={(view) => {
+          if (view === 'landing') router.push('/');
+          if (view === 'roadmap') router.push('/roadmap');
+          if (view === 'dashboard') router.push('/dashboard');
+        }}
+        onReplayIntro={() => router.push('/')}
         onOpenSearch={() => {}}
-        onOpenFlashcards={() => {}}
+        onOpenFlashcards={() => router.push('/flashcards')}
       />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-warm-200">
-          <Link 
-            href="/" 
-            onClick={() => sounds.playClick()}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-warm-100 border border-warm-200 text-warm-800 text-xs font-bold transition-all shadow-card"
+          <button
+            onClick={handleBack}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white hover:bg-warm-100 border border-warm-200 text-warm-800 text-xs font-extrabold transition-all shadow-card cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-sky" />
-            <span>Back to Dashboard</span>
-          </Link>
+            <span>Back</span>
+          </button>
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-light border border-accent-dark/30 text-warm-900 font-extrabold text-sm shadow-card">
             <Coins className="w-5 h-5 text-accent-dark" />
@@ -71,11 +79,11 @@ export default function ShopPage() {
 
         <div className="quest-card p-6 sm:p-10 bg-white border border-warm-200 rounded-3xl shadow-card">
           <div className="text-center mb-8">
-            <div className="w-14 h-14 rounded-2xl bg-accent-light text-accent-dark mx-auto flex items-center justify-center mb-3">
+            <div className="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 mx-auto flex items-center justify-center mb-3">
               <ShoppingBag className="w-8 h-8" />
             </div>
-            <h1 className="text-3xl font-extrabold text-warm-900">LeetCode Merch & Quest Shop</h1>
-            <p className="text-sm text-warm-500 mt-1">Redeem your earned Quest Coins for physical swag, books, and digital powerups!</p>
+            <h1 className="text-3xl font-extrabold text-warm-900">Quest Shop & Merch</h1>
+            <p className="text-xs sm:text-sm text-warm-600 mt-1">Redeem your earned Quest Coins for physical caps, t-shirts, books, and streak boosters!</p>
           </div>
 
           <AnimatePresence>
@@ -126,7 +134,7 @@ export default function ShopPage() {
                       disabled={!canAfford}
                       className={`px-5 py-2.5 rounded-full font-bold text-xs transition-all flex items-center gap-1.5 ${
                         canAfford
-                          ? 'bg-accent-dark hover:bg-amber-600 text-white shadow-sm cursor-pointer hover:scale-105'
+                          ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm cursor-pointer hover:scale-105'
                           : 'bg-warm-200 text-warm-400 cursor-not-allowed'
                       }`}
                     >

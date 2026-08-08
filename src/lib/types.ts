@@ -24,6 +24,10 @@ export interface UserProfile {
   learningStyle: string;
   interests: string[];
   isOnboarded: boolean;
+  isPrivateOnLeaderboard?: boolean;
+  chronotype?: 'morning' | 'night';
+  pacePreference?: 'speedrun' | 'mastery';
+  targetGoal?: 'job' | 'projects' | 'exam' | 'curiosity';
 }
 
 export interface RoadmapNode {
@@ -38,6 +42,21 @@ export interface RoadmapNode {
   status: 'completed' | 'unlocked' | 'locked';
   icon: string;
   prerequisites: string[];
+  conceptTags?: string[];
+  deliverable?: string;
+  practicePrompt?: string;
+  resourceLink?: string;
+  isPersonalized?: boolean;
+  aiRecommendationNote?: string;
+}
+
+export interface AIQuestionnaireAnswers {
+  dailyStudyTime: number;
+  chronotype: 'morning' | 'night';
+  pacePreference: 'speedrun' | 'mastery';
+  skillLevel: 'Beginner' | 'Intermediate' | 'Advanced';
+  targetGoal: 'job' | 'projects' | 'exam' | 'curiosity';
+  focusSubject: SubjectCategory;
 }
 
 export interface MissionChoice {
@@ -56,6 +75,24 @@ export interface MissionStep {
   choices: MissionChoice[];
 }
 
+export interface CuratedLink {
+  title: string;
+  url: string;
+  source: string;
+}
+
+export interface VideoTimestamp {
+  time: string;
+  label: string;
+}
+
+export interface CodeSnippet {
+  language: string;
+  title: string;
+  code: string;
+  explanation: string;
+}
+
 export interface InteractiveMission {
   id: string;
   title: string;
@@ -66,6 +103,14 @@ export interface InteractiveMission {
   coinReward: number;
   durationMinutes: number;
   steps: MissionStep[];
+  articleContent?: string;
+  keyFacts?: string[];
+  videoUrl?: string;
+  videoThumbnail?: string;
+  videoDuration?: string;
+  videoTimestamps?: VideoTimestamp[];
+  codeSnippets?: CodeSnippet[];
+  curatedLinks?: CuratedLink[];
 }
 
 export interface QuizQuestion {
@@ -115,6 +160,7 @@ export interface LeaderboardUser {
   streak: number;
   badge: string;
   isCurrentUser?: boolean;
+  isPrivate?: boolean;
 }
 
 export interface WeeklyStudyStat {
